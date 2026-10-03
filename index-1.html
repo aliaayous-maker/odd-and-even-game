@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>لعبة الأعداد الفردية والزوجية ضمن ٩٩ - المعلمة علياء العويوي</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Tahoma,Arial,sans-serif;background:#f7f7fb;color:#252538}
+.wrap{max-width:760px;margin:auto;padding:18px}.head{text-align:center;background:white;border-radius:22px;padding:20px;box-shadow:0 5px 18px #0001}
+h1{font-size:26px;margin:0 0 8px}.teacher{font-weight:bold}.card{background:white;margin-top:18px;padding:22px;border-radius:22px;box-shadow:0 5px 18px #0001}
+.name{width:100%;font:inherit;padding:12px;border:1px solid #bbb;border-radius:12px;margin-top:8px}
+.num{text-align:center;font-size:76px;font-weight:bold;margin:20px}.q{text-align:center;font-size:22px;font-weight:bold}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:20px}
+button{font:inherit;font-size:22px;font-weight:bold;padding:16px;border:0;border-radius:16px;cursor:pointer;background:#eee}
+button:active{transform:scale(.98)}.feedback{text-align:center;min-height:42px;font-size:21px;font-weight:bold;margin-top:16px}
+.controls{text-align:center;margin-top:10px}.next{font-size:18px;padding:12px 25px}.score{text-align:center;font-size:18px;margin-top:12px}
+.done{text-align:center;font-size:24px;font-weight:bold}.small{text-align:center;font-size:15px;margin-top:8px}
+</style></head>
+<body><div class="wrap">
+<div class="head"><h1>🎯 لعبة الأعداد الفردية والزوجية ضمن ٩٩</h1><div>الصف الثاني الأساسي</div><div class="teacher">المعلمة علياء العويوي</div></div>
+<div class="card" id="game">
+<label><b>اسم الطالبة:</b></label><input id="student" class="name" placeholder="اكتبي اسمك هنا">
+<div class="q">هل العدد الآتي فردي أم زوجي؟</div><div class="num" id="num"></div>
+<div class="answers"><button onclick="answer('زوجي')">زوجي</button><button onclick="answer('فردي')">فردي</button></div>
+<div class="feedback" id="feedback"></div>
+<div class="controls"><button class="next" id="next" onclick="nextQ()" disabled>السؤال التالي ←</button></div>
+<div class="score" id="score"></div></div></div>
+<script>
+const nums=[24,17,68,35,92,41,56,73,10,99,82,27,64,51,38];
+let i=0,points=0,locked=false;
+const ar=n=>String(n).replace(/\d/g,d=>"٠١٢٣٤٥٦٧٨٩"[d]);
+function draw(){document.getElementById('num').textContent=ar(nums[i]);document.getElementById('feedback').textContent='';document.getElementById('next').disabled=true;locked=false;score()}
+function score(){document.getElementById('score').textContent=`النتيجة: ${ar(points)} من ${ar(i+(locked?1:0))}`}
+function answer(v){if(locked)return;locked=true;let correct=nums[i]%2===0?'زوجي':'فردي';let f=document.getElementById('feedback');if(v===correct){points++;f.textContent='🌟 أحسنتِ! إجابة صحيحة';}else{f.textContent=`حاولي الانتباه 💡 الإجابة الصحيحة: ${correct}`;}document.getElementById('next').disabled=false;score()}
+function nextQ(){i++;if(i>=nums.length){let name=document.getElementById('student').value.trim()||'يا بطلة';document.getElementById('game').innerHTML=`<div class="done">🎉 أحسنتِ ${name}!<br>أنهيتِ اللعبة<br><br>نتيجتك ${ar(points)} من ${ar(nums.length)}</div><div class="small">المعلمة علياء العويوي</div>`;return}draw()}draw();
+</script></body></html>
