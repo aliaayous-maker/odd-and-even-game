@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>لعبة الفردي والزوجي ضمن ٩٩</title>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:linear-gradient(135deg,#e8f7ff,#fff1f7,#f3ffe8);
+  text-align:center;
+  color:#263238;
+}
+
+.wrap{
+  max-width:760px;
+  margin:auto;
+  padding:22px;
+}
+
+.card{
+  background:white;
+  border-radius:25px;
+  padding:22px;
+  box-shadow:0 8px 25px rgba(0,0,0,.12);
+}
+
+h1{
+  font-size:30px;
+  margin:5px;
+  color:#00695c;
+}
+
+.teacher{
+  font-size:18px;
+  color:#6a1b9a;
+  margin-bottom:15px;
+}
+
+.name{
+  width:100%;
+  padding:13px;
+  border:2px solid #80cbc4;
+  border-radius:15px;
+  font-size:18px;
+  text-align:right;
+  margin:12px 0;
+}
+
+.flag{
+  font-size:28px;
+  margin:8px;
+}
+
+.message{
+  background:#fff8e1;
+  padding:10px;
+  border-radius:14px;
+  margin:10px 0 18px;
+  font-size:17px;
+}
+
+.number{
+  font-size:82px;
+  font-weight:bold;
+  color:#1565c0;
+  margin:20px;
+}
+
+.answers{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:15px;
+}
+
+button{
+  border:none;
+  border-radius:20px;
+  padding:18px;
+  font-size:24px;
+  font-weight:bold;
+  cursor:pointer;
+  box-shadow:0 5px 10px rgba(0,0,0,.12);
+}
+
+.even{
+  background:#81d4fa;
+}
+
+.odd{
+  background:#f8bbd0;
+}
+
+button:active{
+  transform:scale(.97);
+}
+
+.feedback{
+  font-size:26px;
+  font-weight:bold;
+  min-height:45px;
+  margin:20px 0 10px;
+}
+
+.score{
+  font-size:18px;
+  color:#455a64;
+}
+
+.next{
+  background:#a5d6a7;
+  font-size:18px;
+  padding:12px 25px;
+  margin-top:12px;
+}
+
+.footer{
+  margin-top:20px;
+  font-size:15px;
+  color:#555;
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+<div class="card">
+
+<div class="flag">🇵🇸 ❤️</div>
+
+<h1>🎯 لعبة الفردي والزوجي ضمن ٩٩</h1>
+
+<div class="teacher">
+المعلمة علياء العويوي
+</div>
+
+<div class="message">
+🌿 أنا طالبة مبدعة، أتعلم وأتعاون وأحترم زميلاتي وأحب وطني فلسطين.
+</div>
+
+<input
+  class="name"
+  id="studentName"
+  placeholder="اكتبي اسمكِ هنا"
+>
+
+<p>
+هل العدد الآتي <b>فردي</b> أم <b>زوجي</b>؟
+</p>
+
+<div class="number" id="number">٢٤</div>
+
+<div class="answers">
+
+<button class="even" onclick="answer(true)">
+🌸 زوجي
+</button>
+
+<button class="odd" onclick="answer(false)">
+⭐ فردي
+</button>
+
+</div>
+
+<div class="feedback" id="feedback"></div>
+
+<div class="score">
+النقاط:
+<span id="score">٠</span>
+</div>
+
+<button class="next" onclick="newQuestion()">
+السؤال التالي ➜
+</button>
+
+<div class="footer">
+🇵🇸 بالتعلم نبني وطننا
+</div>
+
+</div>
+</div>
+
+<script>
+
+let current = 24;
+let score = 0;
+
+const arabicDigits =
+['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+
+function toArabic(n){
+  return String(n).replace(
+    /[0-9]/g,
+    d => arabicDigits[d]
+  );
+}
+
+function speak(text){
+  if('speechSynthesis' in window){
+    speechSynthesis.cancel();
+
+    const msg =
+      new SpeechSynthesisUtterance(text);
+
+    msg.lang = 'ar';
+
+    speechSynthesis.speak(msg);
+  }
+}
+
+function newQuestion(){
+
+  current =
+    Math.floor(Math.random()*99)+1;
+
+  document.getElementById('number')
+    .textContent = toArabic(current);
+
+  document.getElementById('feedback')
+    .textContent = '';
+}
+
+function answer(chosenEven){
+
+  const correct =
+    (current % 2 === 0);
+
+  if(chosenEven === correct){
+
+    score++;
+
+    const praise = [
+      'أحسنتِ! إجابة رائعة 🌟',
+      'ممتازة! أبدعتِ 👏',
+      'رائعة جدًا! واصلي التقدم 💖',
+      'بطلة الرياضيات! 🎉',
+      'إجابة صحيحة، أحسنتِ يا مبدعة 🌸'
+    ];
+
+    const text =
+      praise[
+        Math.floor(
+          Math.random()*praise.length
+        )
+      ];
+
+    document.getElementById('feedback')
+      .textContent = text;
+
+    document.getElementById('feedback')
+      .style.color = '#00897b';
+
+    speak(text);
+
+  }else{
+
+    const text =
+      'حاولي مرة أخرى يا بطلة 💪';
+
+    document.getElementById('feedback')
+      .textContent = text;
+
+    document.getElementById('feedback')
+      .style.color = '#e65100';
+
+    speak(text);
+  }
+
+  document.getElementById('score')
+    .textContent = toArabic(score);
+}
+
+newQuestion();
+
+</script>
+
+</body>
+</html>
